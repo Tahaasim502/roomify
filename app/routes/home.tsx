@@ -3,7 +3,9 @@ import Navbar from "../components/Navbar";
 import type { Route } from "./+types/home";
 import { Button } from "~/components/ui/Button";
 import { Layers } from "lucide-react";
-import { data } from "react-router";
+import { data, useNavigate } from "react-router";
+import Upload from "../components/Upload";
+
 export function meta({}: Route.MetaArgs) {
   return [
     { title: "New React Router App" },
@@ -11,7 +13,20 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
+
+
 export default function Home() {
+  //takes the current url provided and stores it
+  const navigate = useNavigate();
+
+  //changes the url into custom url using dynamic routing
+  //base64 is used for converting the image into long text based form, so that we can call an API(process the data mainly in JSON format) and process it 
+  const handleUploadComplete = async(base64Image: string) =>
+  {
+    const newId = Date.now().toString();
+    navigate(`/visualizer/${newId}`);
+    return true;
+  }
   return (
   <div className="home"> 
     <Navbar />
@@ -48,7 +63,8 @@ export default function Home() {
             <h3>Upload your floor plan</h3>
             <p>Supports JPG and PNG formats up to 10MB</p>
           </div>
-          <p>Upload Image</p>
+          <Upload onComplete={(handleUploadComplete)
+          }/>
         </div>
       </div>
 
